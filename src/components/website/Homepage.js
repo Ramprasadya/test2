@@ -233,7 +233,7 @@ const Homepage = () => {
               <div className="flex flex-col relative top-[80%]">
                 <h1  className="text-5xl leading-1 -tracking-[1.64px] text-white ml-8 font-bold" >Easy go Destinations</h1>
                 <div className="w-full items-end justify-end mt-10 flex mr-10 " >
-                <button className="px-3 py-2 ptextb text-white text-3xl font-semibold rounded-[5px] mr-10" >Book & Fly</button>
+                <button className="px-3 py-2 ptextb text-white text-2xl font-semibold rounded-[5px] mr-10" >Book & Fly</button>
                 </div>
               </div>
             </div>
