@@ -1,29 +1,46 @@
 "use client"
-import React from 'react'
-import Navbar from '../navbar/Navbar.js'
-import { SearchIcon } from 'lucide-react'
+import React from "react"
+import Navbar from "../navbar/Navbar.js"
+import { SearchIcon } from "lucide-react"
+import { WordRotate } from "../ui/word-rotate.js"
 
 const Homepage = () => {
-    
+  const Word =["Thrills","Experiences","Adventures","Escapes"]
   return (
-    <div className='w-full relative'>
-         <Navbar/>
-      <div className='flex flex-col justify-center items-center h-screen w-full ' >
+    <div className="relative w-full">
+      <Navbar />
+
+      <section className="relative w-full h-screen overflow-hidden">
         
-         <h1 className='text-[28px] font-normal  ' >It's time for new</h1>
-         <h1 className='text-[28px] font-bold  ' >Thrills</h1>
-         <div className=' px-4 py-2 flex justify-between ' >
-
-          <div className='px-4 py-2  border-2 border-green-400 w-100 rounded-md flex flex-row'>
-         <input className='grow-2 border-none outline-none' type='text' placeholder='Search Destinations, Tours, Activities ' />
-          <SearchIcon/>
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <iframe
+            className="absolute top-1/2 left-1/2 w-[177.77vh] h-screen
+                       min-w-screen min-h-[56.25vw]
+                       -translate-x-1/2 -translate-y-1/2"
+            src="https://www.youtube.com/embed/ziKCB6sWAsE?autoplay=1&mute=1&controls=0&loop=1&playlist=ziKCB6sWAsE&playsinline=1"
+            allow="autoplay; fullscreen"
+          />
+        </div>
+        {/* <div className="absolute inset-0 bg-black/40 -z-10" /> */}
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-4 text-center">
+          <h1 className="text-2xl sm:text-4xl font-normal">
+            It's time for new
+          </h1>
+          <h1 className="">
+            <WordRotate words={Word} className="text-3xl md:text-[80px] font-bold sm:text-5xl  mt-1"  />
+          </h1>
+          <div className="mt-6 w-full max-w-xl">
+            <div className="flex items-center gap-2 border-2 border-green-700 bg-white rounded-md px-4 py-3 text-black">
+              <input
+                className="flex-1 outline-none"
+                type="text"
+                placeholder="Search Destinations, Tours, Activities"
+              />
+              <SearchIcon className="text-gray-600" />
+            </div>
           </div>
-         </div>
-      </div>
-      {/* second */}
-      <div>
-
-      </div>
+        </div>
+      </section>
     </div>
   )
 }
