@@ -101,35 +101,43 @@ const Homepage = () => {
   const Destination = [
     {
       image:Arab,
-      name:"United Arab Emirates"
+      name:"United Arab Emirates",
+      style:"h-[242px]"
     },
     {
       image:thailand,
-      name:"Thailand"
+      name:"Thailand",
+      style:"h-[152px]"
     },
     {
       image:singapore,
-      name:"Singapore"
+      name:"Singapore",
+      style:"h-[154px]"
     },
     {
       image:Mauritius1,
-      name:"Mauritius"
+      name:"Mauritius",
+      style:"h-[171px]"
     },
     {
       image:Maldives1,
-      name:"Maldives"
+      name:"Maldives",
+      style:"h-[223px]"
     },
     {
       image:Malaysia,
-      name:"Malaysia"
+      name:"Malaysia",
+      style:"h-[154px]"
     },
     {
       image:Hongkong,
-      name:"Hong Kong"
+      name:"Hong Kong",
+      style:"h-[266px]"
     },
     {
       image:Azerbaijan,
-      name:"Azerbaijan"
+      name:"Azerbaijan",
+      style:"h-[260px]"
     },
   ]
   return (
@@ -226,21 +234,21 @@ const Homepage = () => {
         </div>
       </section>
       {/* ........ */}
-      <section className="mx-20">
-         <div className="flex flex-col lg:flex-row justify-between items-center">
-            <div className="h-147 w-1/2 relative ">
-              <img className="absolute w-full h-full object-cover rounded-[15px]" src={holidays2cherish.src} alt="holidays2cheris"/>
+      <section className="mx-10 xl:mx-20">
+         <div className="flex flex-col xl:flex-row gap-x-5 justify-between items-center">
+            <div className="h-147 w-full mr-2 xl:w-[50%] relative ">
+              <img className="absolute w-full h-full object-cover rounded-[15px] brightness-75  " src={holidays2cherish.src} alt="holidays2cheris"/>
               <div className="flex flex-col relative top-[80%]">
                 <h1  className="text-5xl leading-1 -tracking-[1.64px] text-white ml-8 font-bold" >Easy go Destinations</h1>
                 <div className="w-full items-end justify-end mt-10 flex mr-10 " >
-                <button className="px-3 py-2 ptextb text-white text-2xl font-semibold rounded-[5px] mr-10" >Book & Fly</button>
+                <button className="px-4 py-2 ptextb text-white text-2xl font-semibold rounded-[5px] mr-10" >Book & Fly</button>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col flex-wrap h-147 gap-10">
+            <div className="flex w-full xl:w-auto items-center justify-center flex-col flex-wrap h-147 gap-5 mt-4 xl:mt-0">
               {Destination.map((item,index)=>
                 <div key={index}>
-                  <img className="object-cover w-46.25 h-auto rounded-[15px]" src={item.image.src} />
+                  <img className={`object-cover w-full xl:w-46.25 rounded-[15px] relative ${item.style} `} src={item.image.src} />
                 </div>
               )}
             </div>
