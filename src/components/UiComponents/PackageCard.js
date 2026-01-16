@@ -4,7 +4,7 @@ import React from 'react'
 const PackageCard = ({image, title, address, price}) => {
     
   return (
-    <div className='border border-[#e5e5e5] overflow-hidden mb-7.5 w-42.5 sm:w-72.5 rounded-2xl flex flex-col' >
+    <div className='border border-[#e5e5e5] overflow-hidden min-h-103.25 mb-7.5 w-42.5 sm:w-72.5 rounded-2xl flex flex-col' >
        <img  className='h-60 w-full object-cover' src={image} alt='destination' />
        <div className='px-4 py-2 mb-2 flex flex-col gap-y-1' >
           <div className=''>

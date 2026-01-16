@@ -3,7 +3,7 @@ import React from 'react'
 
 const Testimonial = ({ name, trip, description }) => {
     return (
-        <div className="border-2 border-[#3fa72a] bg-[#252525] text-white w-60 sm:w-80 lg:w-100 px-3.25 pt-9 pb-3.25 rounded-md relative">
+        <div className="border-2 border-[#3fa72a] bg-[#252525] text-white h-66 w-60 sm:w-80 lg:w-100 px-3.25 pt-9 pb-3.25 rounded-md relative">
             <span className='absolute -top-5 left-1/2 -translate-x-1/2 rotate-180' style={{ overflowY: "visible" }}>  <Quote
                 color="#ff6600"
                 fill="#ff6600"
@@ -23,6 +23,7 @@ const Testimonial = ({ name, trip, description }) => {
                     <Star color="#ede502" fill='#ede502' />
                 </div>
             </div>
+            
         </div>
     )
 }

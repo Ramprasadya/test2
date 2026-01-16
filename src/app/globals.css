@@ -7,6 +7,14 @@
 }
 
 
+.slick-slide {
+  padding: 0 12px;
+}
+
+.slick-list {
+  margin: 0 -12px;
+}
+
 .ptextc{
   color: #3fa72a;
 }
