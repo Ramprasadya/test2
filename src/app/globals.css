@@ -1,8 +1,11 @@
 @import "tailwindcss";
 /* @import "tw-animate-css"; */
 @theme {
-  --breakpoint-mlg: 940px
+  --breakpoint-mlg: 940px;
+  --breakpoint-sm1: 468px;
+  --breakpoint-xsm: 340px;
 }
+
 
 .ptextc{
   color: #3fa72a;
@@ -13,6 +16,7 @@
 .wrap{
   position: relative;
 }
+
 
 .wrap::before {
     content: '\25B6';
@@ -44,6 +48,8 @@
     content: "";
     z-index: 1;
 }
+
+
 
 @custom-variant dark (&:is(.dark *));
 

@@ -1,77 +1,65 @@
-"use client"
-import React, { Component, useRef } from "react";
+"use client";
+import React, { useRef } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { MoveLeft, MoveRight } from "lucide-react";
-function Carousel({ children }) {
-  let sliderRef = useRef()
+
+function Carousel({ children, slides = 5, className="mx-10 sm:mx-20 md:mx-30", arrow=false }) {
+  const sliderRef = useRef(null);
+
   const Next = () => {
-    sliderRef.slickNext()
-  }
+    sliderRef.current?.slickNext();
+  };
+
   const Previous = () => {
-    sliderRef.slickPrev()
-  }
+    sliderRef.current?.slickPrev();
+  };
+
   const settings = {
-    className: "center",
     infinite: true,
-    centerPadding: "60px",
-    slidesToShow: 5,
+    slidesToShow: slides,
     swipeToSlide: true,
     responsive: [
       {
         breakpoint: 1324,
         settings: {
-          className: "center",
-          infinite: true,
-          centerPadding: "60px",
-          slidesToShow: 4,
-          swipeToSlide: true,
-        }
+          slidesToShow: Math.max(slides - 1, 1),
+        },
       },
       {
         breakpoint: 1024,
         settings: {
-          className: "center",
-          infinite: true,
-          centerPadding: "60px",
-          slidesToShow: 3,
-          swipeToSlide: true,
-        }
+          slidesToShow: Math.max(slides - 2, 1),
+        },
       },
       {
         breakpoint: 768,
         settings: {
-          className: "center",
-          infinite: true,
-          centerPadding: "60px",
-          slidesToShow: 2,
-          swipeToSlide: true,
-        }
+          slidesToShow: Math.max(slides - 3, 1),
+        },
       },
       {
         breakpoint: 468,
         settings: {
-          className: "center",
-          infinite: true,
-          centerPadding: "60px",
           slidesToShow: 1,
-          swipeToSlide: true,
-        }
+        },
       },
-    ]
-
+    ],
   };
+
   return (
-    <div className="slider-container relative mx-5 sm:mx-15 md:mx-20">
-      <Slider ref={slider => { sliderRef = slider }} {...settings}>
+    <div className={`slider-container relative ${className}`}>
+      <Slider ref={sliderRef} {...settings}>
         {children}
       </Slider>
-      <div className=" absolute left-0 top-[45%]">
-        <button className="rounded-[50%] h-17.75 w-17.75 z-10 bg-white items-center justify-center flex" onClick={Previous} ><MoveLeft className="ptextc" /></button>
+
+      <div className={`absolute ${arrow ? '-left-6' : 'left-0'} top-[40%]`}>
+       <button className="rounded-[50%] border h-12 md:h-17.75 w-12 md:w-17.75 z-10 bg-white items-center justify-center flex" onClick={Previous} ><MoveLeft className="ptextc" /></button>
       </div>
-      <div className="absolute right-0 top-[45%]" >
-        <button className="rounded-[50%] h-17.75 w-17.75 z-10 bg-white items-center justify-center flex" onClick={Next} ><MoveRight className="ptextc" /></button>
+
+      <div className={`absolute ${arrow ? '-right-6' : 'right-0'} top-[40%]`}>
+        <button className="rounded-[50%] border h-12 md:h-17.75 w-12 md:w-17.75 z-10 bg-white items-center justify-center flex" onClick={Next} ><MoveRight className="ptextc" /></button>
       </div>
     </div>
   );
