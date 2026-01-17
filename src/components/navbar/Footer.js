@@ -186,11 +186,11 @@ const Footer = () => {
 
       {/* Bottom Logo */}
       <div className="mt-10 flex items-center justify-center gap-6">
-        <div className="h-px w-100 bg-gray-400" />
+        <div className="h-px w-25 sm:w-50 md:w-70 lg:w-100 bg-gray-400" />
         <span className="text-white text-sm font-semibold">
-          <img src={Logo.src} alt="Logo footer" />
+          <img className="" src={Logo.src} alt="Logo footer" />
         </span>
-        <div className="h-px w-100 bg-gray-400" />
+        <div className="h-px w-25 sm:w-50 md:w-70 lg:w-100 bg-gray-400" />
       </div>
       
     </footer>

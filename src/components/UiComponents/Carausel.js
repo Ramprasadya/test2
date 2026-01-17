@@ -7,7 +7,7 @@ import { MoveLeft, MoveRight } from "lucide-react";
 
 function Carousel({
   children,
-  className = "mx-10 sm:mx-20",
+  className = "xsm:mx-10 sm:mx-20",
   arrow = true,
 }) {
   const sliderRef = useRef(null);
@@ -33,16 +33,16 @@ function Carousel({
         <>
           <button
             onClick={Previous}
-            className="absolute -left-6 top-1/2 -translate-y-1/2 z-10 
-            h-12 w-12 rounded-full bg-white border flex items-center justify-center shadow"
+            className="absolute -left-6 top-1/2 -translate-y-1/2 z-10 hidden 
+            h-12 w-12 rounded-full bg-white text-[#3fa72a] border xsm:flex items-center justify-center shadow"
           >
             <MoveLeft />
           </button>
 
           <button
             onClick={Next}
-            className="absolute -right-6 top-1/2 -translate-y-1/2 z-10 
-            h-12 w-12 rounded-full bg-white border flex items-center justify-center shadow"
+            className="absolute -right-6 top-1/2 -translate-y-1/2 z-10 hidden
+            h-12 w-12 rounded-full bg-white text-[#3fa72a] border xsm:flex items-center justify-center shadow"
           >
             <MoveRight />
           </button>

@@ -84,7 +84,7 @@ const Navbar = () => {
                 <Link href="/contact" className="text-white" >Contact Us</Link>
             </ul>
             <div className=" mx-5 sm:mx-15 flex  justify-between items-center ">
-                <img className="" src={Logo.src} alt="logo" />
+                <img className=" w-20 h-10 sm1:w-30 sm1:h-15" src={Logo.src} alt="logo" />
                 <ul className=" hidden md:flex  divide-x-3 divide-white/90">
                     {Navigation.map((item, index) => (
                         <Link
@@ -98,7 +98,7 @@ const Navbar = () => {
                     ))}
                 </ul>
                 {/* Mobile Navigation */}
-                <span onClick={() => setOpen(!open)} className="md:hidden flex text-white">
+                <span onClick={() => setOpen(!open)} className="md:hidden flex bg-[#3fa72a] p-1 rounded-[2px] text-white">
                     <Menu />
                 </span>
             </div>

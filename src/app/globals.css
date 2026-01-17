@@ -6,6 +6,17 @@
   --breakpoint-xsm: 340px;
 }
 
+.destination-masonry {
+  column-count: 3;
+  column-gap: 16px;
+  width: 100%;
+}
+
+.destination-masonry-item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+}
+
 
 .slick-slide {
   padding: 0 12px;

@@ -4,7 +4,10 @@ import Navbar from "../navbar/Navbar.js";
 import { Earth, HandCoins, SearchIcon, Users } from "lucide-react";
 import { WordRotate } from "../ui/word-rotate.js";
 import RatingMedia from "../assets/rating-media.png";
-import Card from "../UiComponents/Card.js";
+const Card = dynamic(
+  () => import("../UiComponents/Card.js"),
+  { ssr: false, loading: () => <div className="h-40 bg-gray-200 rounded-xl animate-pulse" /> }
+);
 import Mauritius from "../assets/places/mauritius.jpg";
 import Maldives from "../assets/places/maldives.jpg";
 import Seychelles from "../assets/places/seychelles.jpg";
@@ -20,11 +23,24 @@ import Mauritius1 from "../assets/destination/mauritius.webp";
 import singapore from "../assets/destination/singapore.webp";
 import thailand from "../assets/destination/thailand.jpg";
 import Title from "../UiComponents/Title.js";
-import PackageCard from "../UiComponents/PackageCard.js";
-import PackageCard2 from "../UiComponents/PackageCard2.js";
-import Testimonial from "../UiComponents/Testimonial.js";
+const PackageCard = dynamic(
+  () => import("../UiComponents/PackageCard.js"),
+  { ssr: false, loading: () => <div className="h-40 bg-gray-200 rounded-xl animate-pulse" /> }
+);
+
+const PackageCard2 = dynamic(
+  () => import("../UiComponents/PackageCard2.js"),
+  { ssr: false, loading: () => <div className="h-40 bg-gray-200 rounded-xl animate-pulse" /> }
+);
+
+const Testimonial = dynamic(
+  () => import("../UiComponents/Testimonial.js"),
+  { ssr: false, loading: () => <div className="h-40 bg-gray-200 rounded-xl animate-pulse" /> }
+);
+
 import Footer from "../navbar/Footer.js";
 import BottomFooter from "../navbar/BottomFooter.js";
+import dynamic from "next/dynamic.js";
 
 const Homepage = () => {
   const Word = ["Thrills", "Experiences", "Adventures", "Escapes"];
@@ -420,10 +436,13 @@ const Homepage = () => {
     <div className="relative w-full md:w-236 mlg:w-full!">
       <Navbar />
       {/*Hero section */}
-      <section className="relative w-full h-screen overflow-hidden">
+      <section className="relative w-full h-[50vh] sm1:h-[70vh] md:h-screen overflow-hidden">
+        <div className="absolute inset-0 -z-20 overflow-hidden bg-black">
+          <img src={Bali.src} className="object-cover w-full" alt="Bali" />
+        </div>
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <iframe
-            className="absolute top-1/2 left-1/2 w-[177.77vh] h-screen
+            className="absolute top-1/2 left-1/2 w-[177.77vh] h-[50vh] sm1:h-[70vh] md:h-screen
                        min-w-screen min-h-[56.25vw]
                        -translate-x-1/2 -translate-y-1/2"
             src="https://www.youtube.com/embed/ziKCB6sWAsE?autoplay=1&mute=1&controls=0&loop=1&playlist=ziKCB6sWAsE&playsinline=1"
@@ -432,17 +451,17 @@ const Homepage = () => {
         </div>
         {/* <div className="absolute inset-0 bg-black/40 -z-10" /> */}
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-4 text-center">
-          <h1 className="text-2xl sm:text-4xl font-normal">
+          <h1 className="text-xl sm1:text-2xl sm:text-4xl font-normal">
             It's time for new
           </h1>
           <h1 className="">
             <WordRotate
               words={Word}
-              className="text-3xl md:text-[80px] font-bold sm:text-5xl  mt-1"
+              className=" text-2xl sm1:text-3xl md:text-[80px] font-bold sm:text-5xl  mt-1"
             />
           </h1>
-          <div className="mt-6 w-full max-w-xl">
-            <div className="flex items-center gap-2 border-2 border-green-700 bg-white rounded-md px-4 py-3 text-black">
+          <div className="sm1:mt-6 w-[80%] sm1:w-full max-w-xl">
+            <div className="flex items-center gap-2 border-2 border-green-700 bg-white rounded-md px-2 sm1:px-4 py-2 sm1:py-3 text-black">
               <input
                 className="flex-1 outline-none"
                 type="text"
@@ -455,9 +474,9 @@ const Homepage = () => {
       </section>
       {/* Tiles */}
       <section className="bg-black text-white p-4 mb-5 md:mb-10  ">
-        <div className=" flex flex-col gap-y-4 justify-center items-start text-left sm:grid sm:grid-cols-2 md:grid-cols-4">
+        <div className=" flx flex-col xsm:grid gap-y-4 justify-center items-start text-left grid-cols-2 md:grid-cols-4">
           {Tiles.map((item, indx) => (
-            <div key={indx} className="flex items-center gap-x-3">
+            <div key={indx} className="flex items-center gap-x-3 mt-3 xsm:mt-0">
               {item.icon ? (
                 <span>{item.icon}</span>
               ) : (
@@ -472,7 +491,7 @@ const Homepage = () => {
         </div>
       </section>
       {/* third */}
-      <section className="mb-10 overflow-x-hidden">
+      <section className="mb-10 overflow-x-hidden mx-2 sm1:mx-10 xl:mx-18">
         <div className="flex flex-col lg:flex-row lg:justify-around items-center relative w-full px-4">
           <div className="flex flex-col items-center lg:items-start">
             <h1 className="hidden lg:flex text-2xl md:text-3xl text-[#3a3a3a] font-semibold">
@@ -526,37 +545,55 @@ const Homepage = () => {
         </div>
       </section>
       {/* mesonary */}
-      <section className=" mx-2 sm1:mx-10 xl:mx-20 mb-20   ">
-        <div className="flex flex-col lg:flex-row gap-x-5 items-center">
-          <div className="h-147 w-full mr-2 lg:w-[40%] xl:w-[48%] relative ">
+      {/* MASONRY SECTION */}
+      <section className="mx-2 sm1:mx-10 xl:mx-18 mb-20">
+        <div className="flex flex-col lg:flex-row gap-x-5 justify-center items-start xl:justify-end">
+
+          {/* LEFT BIG IMAGE */}
+          <div className=" h-80 sm:h-120 md:h-147 w-full mr-2 lg:w-[40%] xl:w-[48%] relative">
             <img
-              className="absolute w-full h-full object-cover rounded-[15px] brightness-75  "
+              className="absolute inset-0 w-full h-full object-cover rounded-[15px] brightness-75"
               src={holidays2cherish.src}
-              alt="holidays2cheris"
+              alt="holidays2cherish"
             />
-            <div className="flex flex-col relative top-[80%]">
-              <h1 className=" text-2xl w-xl:text-3xl sm:text-5xl lg:text-3xl xl:text-5xl leading-1 -tracking-[1.64px] text-white ml-8 font-bold">
+
+            <div className="relative h-full flex flex-col justify-end pb-10">
+              <h1 className="text-2xl sm:text-5xl lg:text-3xl xl:text-5xl leading-none sm1:-tracking-[1.64px] text-white ml-8 font-bold">
                 Easy go Destinations
               </h1>
-              <div className="w-full items-end justify-end mt-10 flex mr-10 ">
-                <button className="px-4 py-2 ptextb text-white text-2xl font-semibold rounded-[5px] mr-10">
+
+              <div className="flex justify-end mt-6 mr-10">
+                <button className=" px-2 py-2 sm1:px-4 sm1:py-2 text-white text-xl sm1:text-2xl font-semibold rounded-[5px] ptextb cursor-pointer transition">
                   Book & Fly
                 </button>
               </div>
             </div>
           </div>
-          <div className="flex w-full lg:w-[40%] xl:w-[48%] items-center justify-center flex-col flex-wrap h-147 gap-2 sm:gap-10 lg:gap-3 xl:gap-5 mt-4 xl:mt-0">
-            {Destination.map((item, index) => (
-              <div key={index} className="relative flex flex-col ">
-                <img
-                  className={`object-cover w-20  xsm:w-25 sm1:w-30 sm:w-30 md:w-45 lg:w-46.25  rounded-[15px] relative brightness-75 ${item.style} `}
-                  src={item.image.src}
-                />
-                <p className=" absolute text-white top-[50%] w-full text-center z-10">
-                  <span className="font-semibold">{item.name}</span>
-                </p>
-              </div>
-            ))}
+
+          {/* RIGHT MASONRY */}
+          <div className="w-full lg:w-[40%] xl:w-[48%] mt-4 xl:mt-0">
+            <div className="destination-masonry">
+
+              {Destination.map((item, index) => (
+                <div
+                  key={index}
+                  className={`destination-masonry-item relative rounded-4xl overflow-hidden ${item.style}`}
+                >
+                  <img
+                    src={item.image.src}
+                    alt={item.name}
+                    className="w-full h-full object-cover brightness-75"
+                  />
+
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-white font-semibold text-sm xsm:text-lg sm1:text-lg text-center px-3">
+                      {item.name}
+                    </span>
+                  </div>
+                </div>
+              ))}
+
+            </div>
           </div>
         </div>
       </section>
@@ -614,30 +651,32 @@ const Homepage = () => {
       {/* Testimonial */}
       <section className="bg-[#efefef] pt-7.5 pb-10 w-full  ">
         <div className="flex flex-col">
-          <h1 className="text-[16px] font-semibold  mx-10 lg:mx-20 xl:mx-30">
+          <h1 className="text-[16px] font-semibold text-center mx-10 lg:mx-20 xl:mx-30">
             Let customer's review do the talking!
           </h1>
-          <div className="mt-10">
+          <div className="mt-5">
             <Carousel slides={3} arrow={true}>
               {Testimonials.map((item, index) => (
-                <Testimonial
-                  name={item.name}
-                  trip={item.trip}
-                  description={item.description}
-                  key={index}
-                />
+                <div className="pt-4 relative" >
+                  <Testimonial
+                    name={item.name}
+                    trip={item.trip}
+                    description={item.description}
+                    key={index}
+                  />
+                </div>
               ))}
             </Carousel>
           </div>
           <div className="flex justify-end  mt-5">
-            <button className=" px-4 py-2 ptextb text-white  mr-30 lg:mr-50 rounded-[5px] ">
+            <button className=" px-4 py-2 ptextb text-white mr-5 xsm:mr-10  sm:mr-20 lg:mr-20 rounded-[5px] ">
               View All
             </button>
           </div>
         </div>
       </section>
       <Footer />
-      <BottomFooter/>
+      <BottomFooter />
     </div>
   );
 };
