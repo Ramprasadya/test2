@@ -434,40 +434,43 @@ const Homepage = () => {
     },
   ];
   const destinations = [
-  "United Arab Emirates",
-  "Manali",
-  "Mauritius",
-  "Hong Kong",
-  "Thailand",
-  "Maldives",
-  "Azerbaijan",
-  "Singapore",
-  "Malaysia",
-  "Indonesia",
-  "Sri Lanka",
-  "Turkey",
-  "Georgia",
-  "Vietnam",
-  "Japan",
-  "South Korea",
-  "Italy",
-  "France",
-  "Switzerland",
-  "Spain",
-  "Greece",
-];
+    "United Arab Emirates",
+    "Manali",
+    "Mauritius",
+    "Hong Kong",
+    "Thailand",
+    "Maldives",
+    "Azerbaijan",
+    "Singapore",
+    "Malaysia",
+    "Indonesia",
+    "Sri Lanka",
+    "Turkey",
+    "Georgia",
+    "Vietnam",
+    "Japan",
+    "South Korea",
+    "Italy",
+    "France",
+    "Switzerland",
+    "Spain",
+    "Greece",
+  ];
 
-const [searchDestination, setSearchDestination] = useState("")
-const navigate = useRouter()
- const HandleSearchDestination =(e: React.ChangeEvent<HTMLInputElement>)=>{
-   setSearchDestination(e.target.value)
-   const findDest = destinations.filter((item)=> item.toLocaleLowerCase() === searchDestination.toLocaleLowerCase())
-   console.log(searchDestination)
-   console.log(findDest)
-   if(findDest[0]){
-    navigate.push(`/holidays/${findDest[0]}`)
-   }
- }
+  const [searchDestination, setSearchDestination] = useState("")
+  const router = useRouter()
+  const HandleSearchDestination = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearchDestination(value)
+
+    const findDest = destinations.find(
+      item => item.toLowerCase() === value.toLowerCase()
+    )
+
+    if (findDest) {
+      router.push(`/holidays/${findDest}`)
+    }
+  }
 
   return (
     <div className="relative w-full md:w-236 mlg:w-full!">
@@ -690,11 +693,11 @@ const navigate = useRouter()
       {/* Testimonial */}
       <section className="bg-[#efefef] pt-7.5 pb-10 w-full  ">
         <div className="flex flex-col">
-          <h1 className="text-[16px] font-semibold text-center mx-10 lg:mx-20 xl:mx-30">
+          <h1 className="text-[16px] font-semibold text-center sm:text-left mx-10 lg:mx-20 xl:mx-30">
             Let customer's review do the talking!
           </h1>
           <div className="mt-5">
-            <Carousel  arrow={true}>
+            <Carousel arrow={true}>
               {Testimonials.map((item, index) => (
                 <div className="pt-4 relative" >
                   <Testimonial
