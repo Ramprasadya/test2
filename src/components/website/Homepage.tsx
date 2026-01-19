@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Earth, HandCoins, SearchIcon, Users } from "lucide-react";
 import RatingMedia from "../assets/rating-media.png";
 const Card = dynamic(
-  () => import("../UiComponents/Card"),
+  () => import("../UiComponents/CardComponent/Card"),
   { ssr: false, loading: () => <div className="h-40 bg-gray-200 rounded-xl animate-pulse" /> }
 );
 import Mauritius from "../assets/places/mauritius.jpg";
@@ -27,13 +27,14 @@ import Title from "../UiComponents/Title";
 import Carousel from "../UiComponents/Carausel";
 import Footer from "../navbar/Footer";
 import BottomFooter from "../navbar/BottomFooter";
+import Link from "next/link";
 const PackageCard = dynamic(
-  () => import("../UiComponents/PackageCard"),
+  () => import("../UiComponents/CardComponent/PackageCard"),
   { ssr: false, loading: () => <div className="h-40 bg-gray-200 rounded-xl animate-pulse" /> }
 );
 
 const PackageCard2 = dynamic(
-  () => import("../UiComponents/PackageCard2"),
+  () => import("../UiComponents/CardComponent/PackageCard2"),
   { ssr: false, loading: () => <div className="h-40 bg-gray-200 rounded-xl animate-pulse" /> }
 );
 
@@ -457,18 +458,19 @@ const Homepage = () => {
     "Greece",
   ];
 
-  const [searchDestination, setSearchDestination] = useState("")
+  const [searchDestination, setSearchDestination] = useState<string>("")
+  const [matchDestination, setMatchDestination] = useState<string[]>([])
   const router = useRouter()
+
   const HandleSearchDestination = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setSearchDestination(value)
-
-    const findDest = destinations.find(
-      item => item.toLowerCase() === value.toLowerCase()
-    )
-
-    if (findDest) {
-      router.push(`/holidays/${findDest}`)
+    if (value.length > 2) {
+      const findDest = destinations.filter(
+        item => item.toLowerCase().includes(value.toLowerCase())
+      )
+      console.log(findDest)
+      setMatchDestination(findDest)
     }
   }
 
@@ -510,6 +512,13 @@ const Homepage = () => {
                 placeholder="Search Destinations, Tours, Activities"
               />
               <SearchIcon className="text-gray-600" />
+            </div>
+            <div className="bg-gray-600 rounded-md">
+              {
+                matchDestination.map((d, i) =>
+                  <Link href={`/holidays/${d.toLowerCase()}`} key={i}>{d}</Link>
+                )
+              }
             </div>
           </div>
         </div>

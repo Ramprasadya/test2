@@ -1,202 +1,478 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../navbar/Navbar";
-import HolidayPackageCard from "../UiComponents/HolidayPackageCard";
+import HolidayPackageCard from "../UiComponents/CardComponent/HolidayPackageCard";
 import { RotateCcw } from "lucide-react";
 import FilterSection from "../UiComponents/FilterSection";
 import Footer from "../navbar/Footer";
 import BottomFooter from "../navbar/BottomFooter";
+import Modal from "../UiComponents/Modal";
+import EnquiryForm from "../UiComponents/EnquiryForm";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import PhoneInput from "react-phone-input-2";
+import DatePicker from "react-datepicker";
+import Row from "../UiComponents/Row";
+
+interface FormValues {
+    title: string
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+    travelDate: Date | null,
+    destination: string,
+    pax: string,
+    remark: string
+    captcha: string
+}
+
+type PaxFormValues = {
+    adultTwin: number
+    adultTriple: number
+    adultSingle: number
+    childWithoutBed: number
+    childWithBed: number
+}
+
 
 interface DestinationProps {
-  destinationName: string;
+    destinationName: string;
 }
 
 const Destination = ({ destinationName }: DestinationProps) => {
-  const Nights = [
-    "3 Nights",
-    "5 Nights",
-    "7 Nights",
-    "9 Nights",
-    "10 Nights",
-    "12 Nights",
-  ];
 
-  const Category = [
-    "Adventure",
-    "Family",
-    "Hill Station",
-    "Weekend",
-    "Honeymoon",
-    "Wildlife",
-    "Group Tours",
-    "Religious",
-    "Heritage",
-    "Culture",
-    "Romantic",
-    "Leisure",
-    "Private",
-  ];
+    const [openDialog, setOpenDialog] = useState<boolean>(false)
+    const [openEnqDialog, setOpenEnqDialog] = useState<boolean>(true)
 
-  const Departure: string[] = [];
 
-  const DestinationList = [
-    "Shimla",
-    "Manali",
-    "Srinagar",
-    "Kargil",
-    "Leh",
-    "Nubra",
-    "Pangong",
-    "Jispa",
-    "Delhi",
-    "Narkanda",
-    "Sangla",
-    "Chitkul",
-    "Nako",
-    "Kaza",
-    "Chandratal",
-    "Kalpa",
-    "Sarahan",
-    "Jibhi",
-    "Dalhousie",
-    "Amritsar",
-    "Dharamshala",
-  ];
+    const { register: registerEnq, control: controlEnq, handleSubmit: handleSubmitEnq, formState: { errors }, } = useForm<FormValues>({ defaultValues: { travelDate: null, }, })
 
-  const Price = ["30001-35000"];
+    const onSubmit = (data: FormValues) => {
+        console.log(data)
+    }
 
-  const Plans = [
-    {
-      name: "Kinnaur Wonders with Manali",
-      duration: "8 Days, 7 Nights",
-      destinations: "Narkanda, Sangla, Kalpa, Sarahan, Jibhi, Manali",
-    },
-    {
-      name: "Tribal Circuit with Chandertal Lake",
-      duration: "10 Days, 9 Nights",
-      destinations: "Narkanda, Sangla, Chitkul, Nako, Kaza, Chandertal, Manali",
-    },
-    {
-      name: "Shimla Manali Luxury Tour Package",
-      duration: "6 Days, 5 Nights",
-      destinations: "Shimla, Kufri, Manali, Solang Valley, Kullu",
-    },
-    {
-      name: "North India Escapades",
-      duration: "13 Days, 12 Nights",
-      destinations:
-        "Srinagar, Kargil, Leh, Nubra, Pangong, Jispa, Manali, Delhi",
-    },
-    {
-      name: "Manali Honeymoon Special",
-      duration: "5 Days, 4 Nights",
-      destinations: "Manali, Solang Valley, Rohtang Pass, Kullu",
-    },
-    {
-      name: "Himachal Adventure Trail",
-      duration: "9 Days, 8 Nights",
-      destinations: "Manali, Kasol, Tosh, Kheerganga, Jibhi, Tirthan Valley",
-    },
-    {
-      name: "Spiti Valley Road Trip",
-      duration: "11 Days, 10 Nights",
-      destinations: "Shimla, Kalpa, Kaza, Key Monastery, Chandertal, Manali",
-    },
-    {
-      name: "Manali Family Holiday",
-      duration: "7 Days, 6 Nights",
-      destinations: "Manali, Solang Valley, Naggar, Kullu, Manikaran",
-    },
-    {
-      name: "Leh Ladakh with Manali",
-      duration: "12 Days, 11 Nights",
-      destinations: "Manali, Jispa, Sarchu, Leh, Nubra Valley, Pangong Lake",
-    },
-    {
-      name: "Best of Himachal Pradesh",
-      duration: "10 Days, 9 Nights",
-      destinations: "Shimla, Narkanda, Sangla, Kalpa, Manali, Dharamshala",
-    },
-  ];
+    const { register: registerPax, control: controlPax, handleSubmit: handleSubmitPax } = useForm<PaxFormValues>({
+        defaultValues: {
+            adultTwin: 0,
+            adultTriple: 0,
+            adultSingle: 0,
+            childWithoutBed: 0,
+            childWithBed: 0,
+        },
+    })
 
-  return (
-    <div className="w-full overflow-hidden">
-      <Navbar bgwhite={true} />
+    const values = useWatch({ control: controlPax })
 
-      {/* HERO SECTION */}
-      <div className="relative h-[55vh] flex flex-col justify-center items-center overflow-hidden">
-        <div className="absolute inset-0 -z-20 bg-black">
-          <img
-            src="https://www.holidays2cherish.com/public/images/search-result-listing.jpg"
-            className="w-full h-full object-cover brightness-75"
-            alt="Destination"
-          />
-        </div>
+    const totalPax =
+        (values?.adultTwin || 0) +
+        (values?.adultTriple || 0) +
+        (values?.adultSingle || 0) +
+        (values?.childWithoutBed || 0) +
+        (values?.childWithBed || 0)
 
-        <h1 className=" text-2xl sm1:text-4xl font-semibold text-white">
-          Manali Tour Packages!
-        </h1>
+    const handlePax = (data: PaxFormValues) => {
+        console.log({ ...data, totalPax })
+    }
 
-        <hr className="h-0.5 w-24 bg-white mt-5" />
+    const Nights = [
+        "3 Nights",
+        "5 Nights",
+        "7 Nights",
+        "9 Nights",
+        "10 Nights",
+        "12 Nights",
+    ];
 
-        <p className="mt-10 text-white">Request Callback</p>
+    const Category = [
+        "Adventure",
+        "Family",
+        "Hill Station",
+        "Weekend",
+        "Honeymoon",
+        "Wildlife",
+        "Group Tours",
+        "Religious",
+        "Heritage",
+        "Culture",
+        "Romantic",
+        "Leisure",
+        "Private",
+    ];
 
-        <div className="absolute inset-x-0 bottom-0 h-10 bg-black/70" />
+    const Departure: string[] = [];
 
-        <div className="absolute bottom-2 left-[15%] text-white">
-          <span>Holidays</span>
-          <span className="font-semibold">/{destinationName}</span>
-        </div>
-      </div>
+    const DestinationList = [
+        "Shimla",
+        "Manali",
+        "Srinagar",
+        "Kargil",
+        "Leh",
+        "Nubra",
+        "Pangong",
+        "Jispa",
+        "Delhi",
+        "Narkanda",
+        "Sangla",
+        "Chitkul",
+        "Nako",
+        "Kaza",
+        "Chandratal",
+        "Kalpa",
+        "Sarahan",
+        "Jibhi",
+        "Dalhousie",
+        "Amritsar",
+        "Dharamshala",
+    ];
 
-      {/* MAIN CONTENT */}
-      <div className="my-10">
-        <div className="mx-auto max-w-350 px-5">
-          <div className="flex gap-10 h-[calc(100vh-120px)]">
-            {/* FILTER */}
-            <aside className="hidden lg:block w-[20%] border-t-4 border-[#3fa72a] h-full">
-              <div className="sticky top-0 h-fit max-h-[calc(100vh-100px)] overflow-y-auto shadow-2xl">
-                <div className="p-5">
-                  <p className="font-semibold">7 out of 7 packages</p>
+    const Price = ["30001-35000"];
 
-                  <div className="flex justify-between items-center mt-2">
-                    <span>Filter</span>
-                    <span className="flex items-center gap-x-2 cursor-pointer">
-                      <RotateCcw size={16} />
-                      Reset
-                    </span>
-                  </div>
+    const Plans = [
+        {
+            name: "Kinnaur Wonders with Manali",
+            duration: "8 Days, 7 Nights",
+            destinations: "Narkanda, Sangla, Kalpa, Sarahan, Jibhi, Manali",
+        },
+        {
+            name: "Tribal Circuit with Chandertal Lake",
+            duration: "10 Days, 9 Nights",
+            destinations: "Narkanda, Sangla, Chitkul, Nako, Kaza, Chandertal, Manali",
+        },
+        {
+            name: "Shimla Manali Luxury Tour Package",
+            duration: "6 Days, 5 Nights",
+            destinations: "Shimla, Kufri, Manali, Solang Valley, Kullu",
+        },
+        {
+            name: "North India Escapades",
+            duration: "13 Days, 12 Nights",
+            destinations:
+                "Srinagar, Kargil, Leh, Nubra, Pangong, Jispa, Manali, Delhi",
+        },
+        {
+            name: "Manali Honeymoon Special",
+            duration: "5 Days, 4 Nights",
+            destinations: "Manali, Solang Valley, Rohtang Pass, Kullu",
+        },
+        {
+            name: "Himachal Adventure Trail",
+            duration: "9 Days, 8 Nights",
+            destinations: "Manali, Kasol, Tosh, Kheerganga, Jibhi, Tirthan Valley",
+        },
+        {
+            name: "Spiti Valley Road Trip",
+            duration: "11 Days, 10 Nights",
+            destinations: "Shimla, Kalpa, Kaza, Key Monastery, Chandertal, Manali",
+        },
+        {
+            name: "Manali Family Holiday",
+            duration: "7 Days, 6 Nights",
+            destinations: "Manali, Solang Valley, Naggar, Kullu, Manikaran",
+        },
+        {
+            name: "Leh Ladakh with Manali",
+            duration: "12 Days, 11 Nights",
+            destinations: "Manali, Jispa, Sarchu, Leh, Nubra Valley, Pangong Lake",
+        },
+        {
+            name: "Best of Himachal Pradesh",
+            duration: "10 Days, 9 Nights",
+            destinations: "Shimla, Narkanda, Sangla, Kalpa, Manali, Dharamshala",
+        },
+    ];
 
-                  <hr className="my-3 h-0.5 bg-black" />
+    return (
+        <div className="w-full overflow-hidden">
+            <Navbar bgwhite={true} />
 
-                  <FilterSection title="Number of Nights" data={Nights} />
-                  <FilterSection title="Category" data={Category} />
-                  <FilterSection title="Departure From" data={Departure} />
-                  <FilterSection title="Destination" data={DestinationList} />
-                  <FilterSection title="Price" data={Price} />
+            {/* HERO SECTION */}
+            <div className="relative h-[55vh] flex flex-col justify-center items-center overflow-hidden">
+                <div className="absolute inset-0 -z-20 bg-black">
+                    <img
+                        src="https://www.holidays2cherish.com/public/images/search-result-listing.jpg"
+                        className="w-full h-full object-cover brightness-75"
+                        alt="Destination"
+                    />
                 </div>
-              </div>
-            </aside>
 
-            {/* CARDS – SCROLLABLE */}
-            <main className="w-full lg:w-[80%] h-full overflow-y-auto pr-2 no-scrollbar flex flex-col gap-7">
-              {Plans.map((plan, index) => (
-                <HolidayPackageCard
-                  key={index}
-                  name={plan.name}
-                  duration={plan.duration}
-                  destinations={plan.destinations}
-                />
-              ))}
-            </main>
-          </div>
+                <h1 className=" text-2xl sm1:text-4xl font-semibold text-white">
+                    Manali Tour Packages!
+                </h1>
+
+                <hr className="h-0.5 w-24 bg-white mt-5" />
+
+                <p onClick={() => setOpenDialog(true)} className="mt-10 text-white cursor-pointer">Request Callback</p>
+
+                <div className="absolute inset-x-0 bottom-0 h-10 bg-black/70" />
+
+                <div className="absolute bottom-2 left-[15%] text-white">
+                    <span>Holidays</span>
+                    <span className="font-semibold capitalize">/{destinationName}</span>
+                </div>
+            </div>
+
+            {/* MAIN CONTENT */}
+            <div className="my-10">
+                <div className="mx-auto max-w-350 px-5">
+                    <div className="flex gap-10 lg:h-[calc(100vh-120px)]">
+                        {/* FILTER */}
+                        <aside className="hidden lg:block w-[20%] border-t-4 border-[#3fa72a] h-full">
+                            <div className="sticky top-0 h-fit max-h-[calc(100vh-100px)] overflow-y-auto shadow-2xl" style={{ scrollbarWidth: "thin" }} >
+                                <div className="p-5">
+                                    <p className="font-semibold">7 out of 7 packages</p>
+
+                                    <div className="flex justify-between items-center mt-2">
+                                        <span>Filter</span>
+                                        <span className="flex items-center gap-x-2 cursor-pointer">
+                                            <RotateCcw size={16} />
+                                            Reset
+                                        </span>
+                                    </div>
+
+                                    <hr className="my-3 h-0.5 bg-black" />
+
+                                    <FilterSection title="Number of Nights" data={Nights} />
+                                    <FilterSection title="Category" data={Category} />
+                                    <FilterSection title="Departure From" data={Departure} />
+                                    <FilterSection title="Destination" data={DestinationList} />
+                                    <FilterSection title="Price" data={Price} />
+                                </div>
+                            </div>
+                        </aside>
+
+                        {/* CARDS – SCROLLABLE */}
+                        <main className="w-full lg:w-[80%] h-full lg:overflow-y-auto pr-2 bg-gray-100 flex flex-col gap-7" style={{ scrollbarWidth: "none" }} >
+                            {Plans.map((plan, index) => (
+                                <HolidayPackageCard
+                                    key={index}
+                                    name={plan.name}
+                                    duration={plan.duration}
+                                    destinations={plan.destinations}
+
+                                />
+                            ))}
+                            <div>
+                                <form
+                                    onSubmit={handleSubmitEnq(onSubmit)}
+                                    className=" flex w-full space-x-4 rounded-lg"
+                                >
+
+                                    <div className=' w-full flex flex-col gap-y-4 p-6'>
+
+                                        <div>
+                                            <h1 className="text-2xl font-semibold">
+                                                We are here to serve you in the best way
+                                            </h1>
+                                            <hr className="my-3" />
+                                            <p className="text-[16px] text-black">
+                                                We would like to understand your plans and come up with the right strategic advice for best tour package for you.
+                                            </p>
+                                        </div>
+
+
+                                        <div className="grid grid-cols-5 gap-3">
+                                            <select
+                                                {...registerEnq('title', { required: true })}
+                                                className="rounded border px-3 py-2 text-sm bg-white"
+                                            >
+                                                <option value="Mr">Mr.</option>
+                                                <option value="Ms">Ms.</option>
+                                                <option value="Ms">Miss</option>
+                                            </select>
+
+                                            <input
+                                                {...registerEnq('firstName', { required: 'First name required' })}
+                                                placeholder="First Name"
+                                                className="col-span-2 rounded border px-3 py-2 text-sm bg-white"
+                                            />
+                                            <input
+                                                {...registerEnq('lastName', { required: 'Last name required' })}
+                                                placeholder="Last Name"
+                                                className="rounded col-span-2 border px-3 py-2 text-sm bg-white"
+                                            />
+                                        </div>
+
+
+                                        <div className="grid grid-cols-2 gap-3">
+
+
+                                            <input
+                                                {...registerEnq('email', {
+                                                    required: 'Email required',
+                                                    pattern: {
+                                                        value: /^\S+@\S+$/,
+                                                        message: 'Invalid email',
+                                                    },
+                                                })}
+                                                placeholder="Email Address"
+                                                className="rounded border px-3 py-2 text-sm bg-white"
+                                            />
+                                            <Controller
+                                                name="phone"
+                                                control={controlEnq}
+                                                rules={{ required: 'Mobile number required' }}
+                                                render={({ field }) => (
+                                                    <PhoneInput
+                                                        {...field}
+                                                        country="in"
+                                                        enableSearch
+                                                        placeholder="Mobile"
+                                                        inputClass="!w-full !border !rounded !py-3 !pl-12 !text-sm h-[40px]! bg-white"
+                                                        containerClass="!w-full"
+                                                    />
+                                                )}
+                                            />
+                                        </div>
+
+
+                                        <div className="grid grid-cols-3 gap-3">
+                                            <Controller
+                                                name="travelDate"
+                                                control={controlEnq}
+                                                rules={{ required: 'Travel date required' }}
+                                                render={({ field }) => (
+                                                    <div className="relative w-full bg-white">
+                                                        <DatePicker
+                                                            selected={field.value}
+                                                            onChange={field.onChange}
+                                                            placeholderText="Traveller Date"
+                                                            className="w-full rounded border px-3 py-2 pr-10 text-sm"
+                                                            wrapperClassName="w-full"
+                                                        />
+                                                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+                                                            📅
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            />
+                                            <input
+                                                {...registerEnq('destination', { required: 'Destination is required' })}
+                                                placeholder="Manali"
+                                                className=" rounded border px-3 py-2 text-sm bg-white"
+                                            />
+                                            <input
+                                                {...registerEnq('pax', { required: 'Number of pax is required' })}
+                                                placeholder="No.of Pax"
+                                                className=" rounded border px-3 py-2 text-sm bg-white"
+                                            />
+                                        </div>
+
+                                        <textarea
+                                            {...registerEnq('remark')}
+                                            placeholder="Remark...."
+                                            className="col-span-2 rounded border px-3 py-2 text-sm bg-white"
+                                            cols={50}
+                                            rows={4}
+                                        />
+
+                                        <div className="flex items-center gap-3">
+                                            <input
+                                                {...registerEnq('captcha', { required: 'Captcha required' })}
+                                                placeholder="Captcha code*"
+                                                className=" rounded border px-3 py-2 text-sm bg-white"
+                                            />
+                                            <span className="font-semibold text-blue-600">epidemy</span>
+                                            <button type="button" className="text-green-600">
+                                                ⟳
+                                            </button>
+                                        </div>
+
+                                        <div className="flex justify-end pt-2">
+                                            <button
+                                                type="submit"
+                                                className="rounded bg-green-600 px-6 py-2 text-sm font-medium text-white hover:bg-green-700 cursor-pointer"
+                                            >
+                                                Send Enquiry
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            </div>
+            <Footer />
+            <BottomFooter />
+            <Modal isOpen={openDialog} setIsOpen={setOpenDialog} >
+                <EnquiryForm image="https://www.holidays2cherish.com/public/upload/holidays2cherish/images/enquiry_holidays2cherish.jpg" title="Haven't found an offer you like?" openSubModal={setOpenEnqDialog} />
+            </Modal>
+            <Modal isOpen={openEnqDialog} setIsOpen={setOpenEnqDialog}>
+
+                <div
+                    className=" flex w-full space-x-4 rounded-lg bg-white"
+                >
+                    <div className='w-1/2 hidden md:flex' >
+                        <img className='h-full w-full' src="https://www.holidays2cherish.com/public/images/noimageother.jpg" alt='Modal contact' />
+                    </div>
+                    <div className=' w-full md:w-1/2 flex flex-col gap-y-4 p-6 mt-4'>
+                        <form
+                            onSubmit={handleSubmitPax(handlePax)}
+                            className="w-full max-w-xl rounded  bg-white"
+                        >
+                            <div className="border">
+
+
+                                <div className="grid grid-cols-2 bg-yellow-50 px-4 py-2 font-semibold">
+                                    <div>Details/Room type</div>
+                                    <div className="text-right">No. of Pax</div>
+                                </div>
+
+                                <Row
+                                    label="Adult (Twin Sharing)"
+                                    {...registerPax('adultTwin', { valueAsNumber: true, min: 0 })}
+                                />
+
+                                <Row
+                                    label="Adult (Triple Sharing)"
+                                    {...registerPax('adultTriple', { valueAsNumber: true, min: 0 })}
+                                />
+
+                                <Row
+                                    label="Adult (Single Room)"
+                                    {...registerPax('adultSingle', { valueAsNumber: true, min: 0 })}
+                                />
+
+                                <Row
+                                    label="Child Without Bed"
+                                    {...registerPax('childWithoutBed', { valueAsNumber: true, min: 0 })}
+                                />
+
+                                <Row
+                                    label="Child Extra / With Bed"
+                                    {...registerPax('childWithBed', { valueAsNumber: true, min: 0 })}
+                                />
+
+                                {/* Total */}
+                                <div className="grid grid-cols-2 border-t px-4 py-3 font-semibold">
+                                    <div>Total (No. of Pax)</div>
+                                    <div className="text-right">{totalPax}</div>
+                                </div>
+                            </div>
+                            {/* Actions */}
+                            <div className="flex justify-between gap-4 px-4 py-4">
+                                <button
+                                    type="button"
+                                    className="rounded bg-green-600 px-6 py-2 text-white hover:bg-green-700"
+                                >
+                                    Back
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    className="rounded bg-green-600 px-6 py-2 text-white hover:bg-green-700"
+                                >
+                                    Check Rate &amp; Book
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </Modal>
         </div>
-      </div>
-      <Footer />
-      <BottomFooter/>
-    </div>
-  );
+    );
 };
 
 export default Destination;
