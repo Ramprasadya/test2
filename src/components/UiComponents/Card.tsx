@@ -1,9 +1,16 @@
 import React from 'react'
 
-const Card = ({image,name,index}:any) => {
+
+interface CardProps {
+  image: string | { src: string; [key: string]: any };
+  name: string;
+}
+
+const Card = ({image,name}:CardProps) => {
+  const imageSrc = typeof image === 'string' ? image : image.src;
   return (
-    <div key={index} className=' h-60 xsm:h-88.75 w-45 sm:w-60 overflow-hidden rounded-[15px] relative  hover:shadow-lg cursor-pointer'>
-        <img src={image.src || image} className='w-full h-full absolute object-cover hover:scale-105 shadow-lg transform transition-transform duration-500' alt={name} />
+    <div className=' h-60 xsm:h-88.75 w-45 sm:w-60 overflow-hidden rounded-[15px] relative  hover:shadow-lg cursor-pointer'>
+        <img src={imageSrc} className='w-full h-full absolute object-cover hover:scale-105 shadow-lg transform transition-transform duration-500' alt={name} />
          <div className="
         absolute inset-x-0 bottom-0 h-1/2
         bg-linear-to-t from-black/70 to-transparent

@@ -2,13 +2,21 @@
 import { MapPin } from "lucide-react"
 import React from "react"
 
-const PackageCard2 = ({ image, title, duration }:any) => {
+type PackageCardProps = {
+  image: string | File;
+  title: string;
+ duration: string;
+};
+
+const PackageCard2 = ({ image, title, duration }:PackageCardProps) => {
+  const imageSrc = typeof image === 'string' ? image : URL.createObjectURL(image);
+  
   return (
     <div className="border border-[#e5e5e5] h-80 sm1:h-103.25 w-55.75 rounded-2xl overflow-hidden flex flex-col bg-white">
       
       <div className="relative h-50 sm1:h-75 overflow-hidden">
         <img
-          src={image?.src || image}
+          src={imageSrc}
           alt={title}
           className="w-full h-full object-cover scale-100 hover:scale-105 shadow-lg transform transition-transform duration-500"
         />

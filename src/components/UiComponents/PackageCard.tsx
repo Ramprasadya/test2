@@ -1,7 +1,14 @@
 "use client"
 import React from 'react'
 
-const PackageCard = ({image, title, address, price}:any) => {
+type PackageCardProps = {
+  image: string;
+  title: string;
+  address: string;
+  price: number | string;
+};
+
+const PackageCard = ({image, title, address, price}:PackageCardProps) => {
     
   return (
     <div className='border border-[#e5e5e5] overflow-hidden h-100 sm1:h-106.25 mb-7.5 w-55.75 sm:w-72.5 rounded-2xl flex flex-col' >
