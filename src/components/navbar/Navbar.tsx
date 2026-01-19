@@ -73,7 +73,7 @@ const Navbar = ({ bgwhite = false }) => {
 
                     
                 </ul>
-                <ul className="bg-gray-800 flex md:hidden items-end p-1 justify-end" >
+                <ul className={`bg-gray-800 ${bgwhite ? "text-white" : "text-white"} flex md:hidden items-end p-1 justify-end`} >
                     <Link href="/contact" className="" >Contact Us</Link>
                 </ul>
                 <div className=" mx-5 sm:mx-15 flex  justify-between items-center ">
