@@ -3,6 +3,10 @@ import { CarFront, Image, Utensils } from 'lucide-react'
 import React, { useState } from 'react'
 import Modal from '../Modal';
 import EnquiryForm from '../EnquiryForm';
+import { useForm, useWatch } from 'react-hook-form';
+import Row from '../Row';
+import PaxForm from '../PaxForm';
+import Link from 'next/link';
 
 interface HolidayPackageCardProps {
   name?: string;
@@ -10,14 +14,17 @@ interface HolidayPackageCardProps {
   destinations?: string;
 }
 
+
+
 const HolidayPackageCard = ({ name, duration, destinations }: HolidayPackageCardProps) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false)
-
-
+  const [step, setStep] = useState<"enquiry" | "pax">("enquiry")
 
   const handleOpenDialog = () => {
     setOpenDialog(true)
   }
+
+      
 
   // console.log(typeof(name))
 
@@ -45,15 +52,15 @@ const HolidayPackageCard = ({ name, duration, destinations }: HolidayPackageCard
           <p className='flex flex-col items-center' ><Utensils /><span>Meal</span></p>
         </div>
         <div className='flex gap-4 items-center'>
-          <button className=' px-2 py-1 text-white bg-[#3fa72a] rounded-[5px] cursor-pointer ' >View Details</button>
+          <Link href={`/detail/${name}`} className=' px-2 py-1 text-white bg-[#3fa72a] rounded-[5px] cursor-pointer ' >View Details</Link>
           <button className=' px-2 py-1 text-white bg-[#ff6600] rounded-[5px] cursor-pointer  ' onClick={handleOpenDialog}  >Book Now</button>
         </div>
       </div>
       {/* Enquiry Form */}
       <Modal isOpen={openDialog} setIsOpen={() => setOpenDialog(false)} >
-        <EnquiryForm image="https://www.holidays2cherish.com/public/images/noimageother.jpg" title={name??""}  />
+       { step ==="enquiry" && <EnquiryForm image="https://www.holidays2cherish.com/public/images/noimageother.jpg" title={name??""} setStep={setStep}  />}
+       {step ==="pax" && <PaxForm setStep={setStep} /> } 
       </Modal>
-      
     </div>
   )
 }

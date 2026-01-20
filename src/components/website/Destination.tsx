@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Navbar from "../navbar/Navbar";
 import HolidayPackageCard from "../UiComponents/CardComponent/HolidayPackageCard";
 import { RotateCcw } from "lucide-react";
@@ -9,10 +9,10 @@ import Footer from "../navbar/Footer";
 import BottomFooter from "../navbar/BottomFooter";
 import Modal from "../UiComponents/Modal";
 import EnquiryForm from "../UiComponents/EnquiryForm";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import DatePicker from "react-datepicker";
-import Row from "../UiComponents/Row";
+import ReCAPTCHA from "react-google-recaptcha";
 
 interface FormValues {
     title: string
@@ -27,15 +27,6 @@ interface FormValues {
     captcha: string
 }
 
-type PaxFormValues = {
-    adultTwin: number
-    adultTriple: number
-    adultSingle: number
-    childWithoutBed: number
-    childWithBed: number
-}
-
-
 interface DestinationProps {
     destinationName: string;
 }
@@ -43,36 +34,14 @@ interface DestinationProps {
 const Destination = ({ destinationName }: DestinationProps) => {
 
     const [openDialog, setOpenDialog] = useState<boolean>(false)
-    const [openEnqDialog, setOpenEnqDialog] = useState<boolean>(true)
+
+    const recaptcha = useRef(null);
 
 
     const { register: registerEnq, control: controlEnq, handleSubmit: handleSubmitEnq, formState: { errors }, } = useForm<FormValues>({ defaultValues: { travelDate: null, }, })
 
     const onSubmit = (data: FormValues) => {
         console.log(data)
-    }
-
-    const { register: registerPax, control: controlPax, handleSubmit: handleSubmitPax } = useForm<PaxFormValues>({
-        defaultValues: {
-            adultTwin: 0,
-            adultTriple: 0,
-            adultSingle: 0,
-            childWithoutBed: 0,
-            childWithBed: 0,
-        },
-    })
-
-    const values = useWatch({ control: controlPax })
-
-    const totalPax =
-        (values?.adultTwin || 0) +
-        (values?.adultTriple || 0) +
-        (values?.adultSingle || 0) +
-        (values?.childWithoutBed || 0) +
-        (values?.childWithBed || 0)
-
-    const handlePax = (data: PaxFormValues) => {
-        console.log({ ...data, totalPax })
     }
 
     const Nights = [
@@ -126,61 +95,130 @@ const Destination = ({ destinationName }: DestinationProps) => {
         "Dharamshala",
     ];
 
-    const Price = ["30001-35000"];
+    const Price = ["10001-15000","15001-20000","20001-25000"];
 
-    const Plans = [
-        {
-            name: "Kinnaur Wonders with Manali",
-            duration: "8 Days, 7 Nights",
-            destinations: "Narkanda, Sangla, Kalpa, Sarahan, Jibhi, Manali",
-        },
-        {
-            name: "Tribal Circuit with Chandertal Lake",
-            duration: "10 Days, 9 Nights",
-            destinations: "Narkanda, Sangla, Chitkul, Nako, Kaza, Chandertal, Manali",
-        },
-        {
-            name: "Shimla Manali Luxury Tour Package",
-            duration: "6 Days, 5 Nights",
-            destinations: "Shimla, Kufri, Manali, Solang Valley, Kullu",
-        },
-        {
-            name: "North India Escapades",
-            duration: "13 Days, 12 Nights",
-            destinations:
-                "Srinagar, Kargil, Leh, Nubra, Pangong, Jispa, Manali, Delhi",
-        },
-        {
-            name: "Manali Honeymoon Special",
-            duration: "5 Days, 4 Nights",
-            destinations: "Manali, Solang Valley, Rohtang Pass, Kullu",
-        },
-        {
-            name: "Himachal Adventure Trail",
-            duration: "9 Days, 8 Nights",
-            destinations: "Manali, Kasol, Tosh, Kheerganga, Jibhi, Tirthan Valley",
-        },
-        {
-            name: "Spiti Valley Road Trip",
-            duration: "11 Days, 10 Nights",
-            destinations: "Shimla, Kalpa, Kaza, Key Monastery, Chandertal, Manali",
-        },
-        {
-            name: "Manali Family Holiday",
-            duration: "7 Days, 6 Nights",
-            destinations: "Manali, Solang Valley, Naggar, Kullu, Manikaran",
-        },
-        {
-            name: "Leh Ladakh with Manali",
-            duration: "12 Days, 11 Nights",
-            destinations: "Manali, Jispa, Sarchu, Leh, Nubra Valley, Pangong Lake",
-        },
-        {
-            name: "Best of Himachal Pradesh",
-            duration: "10 Days, 9 Nights",
-            destinations: "Shimla, Narkanda, Sangla, Kalpa, Manali, Dharamshala",
-        },
-    ];
+const Plans = [
+    {
+        name: "Kinnaur Wonders with Manali",
+        duration: "8 Days, 7 Nights",
+        destinations: "Narkanda, Sangla, Kalpa, Sarahan, Jibhi, Manali",
+        category: ["Hill Station", "Adventure", "Leisure"],
+        price: "14000, 18000"
+    },
+    {
+        name: "Tribal Circuit with Chandertal Lake",
+        duration: "10 Days, 9 Nights",
+        destinations: "Narkanda, Sangla, Chitkul, Nako, Kaza, Chandertal, Manali",
+        category: ["Adventure", "Culture", "Group Tours"],
+       price: "22000, 26000"
+    },
+    {
+        name: "Shimla Manali Luxury Tour Package",
+        duration: "6 Days, 5 Nights",
+        destinations: "Shimla, Kufri, Manali, Solang Valley, Kullu",
+        category: ["Family", "Leisure", "Hill Station", "Private"],
+        price: "18000, 22000"
+    },
+    {
+        name: "North India Escapades",
+        duration: "13 Days, 12 Nights",
+        destinations: "Srinagar, Kargil, Leh, Nubra, Pangong, Jispa, Manali, Delhi",
+        category: ["Adventure", "Group Tours", "Culture"],
+        price: "30000, 38000"
+    },
+    {
+        name: "Manali Honeymoon Special",
+        duration: "5 Days, 4 Nights",
+        destinations: "Manali, Solang Valley, Rohtang Pass, Kullu",
+        category: ["Honeymoon", "Romantic", "Private"],
+        price: "15000, 20000"
+    },
+    {
+        name: "Himachal Adventure Trail",
+        duration: "9 Days, 8 Nights",
+        destinations: "Manali, Kasol, Tosh, Kheerganga, Jibhi, Tirthan Valley",
+        category: ["Adventure", "Group Tours", "Hill Station"],
+        price: "20000, 26000"
+    },
+    {
+        name: "Spiti Valley Road Trip",
+        duration: "11 Days, 10 Nights",
+        destinations: "Shimla, Kalpa, Kaza, Key Monastery, Chandertal, Manali",
+        category: ["Adventure", "Culture", "Heritage"],
+        price: "28000, 35000"
+    },
+    {
+        name: "Manali Family Holiday",
+        duration: "7 Days, 6 Nights",
+        destinations: "Manali, Solang Valley, Naggar, Kullu, Manikaran",
+        category: ["Family", "Leisure", "Hill Station"],
+         price: "16000, 21000"
+    },
+    {
+        name: "Leh Ladakh with Manali",
+        duration: "12 Days, 11 Nights",
+        destinations: "Manali, Jispa, Sarchu, Leh, Nubra Valley, Pangong Lake",
+        category: ["Adventure", "Group Tours", "Culture"],
+        price: "32000, 42000"
+    },
+    {
+        name: "Best of Himachal Pradesh",
+        duration: "10 Days, 9 Nights",
+        destinations: "Shimla, Narkanda, Sangla, Kalpa, Manali, Dharamshala",
+        category: ["Family", "Leisure", "Hill Station"],
+        price: "20000, 26000"
+       
+    },
+];
+
+
+
+    // Filtering destination data 
+    const [selectedNights, setSelectedNights] = useState<string[]>([])
+    const [selectedCategory, setSelectedCategory] = useState<string[]>([])
+    const [selectedDestinations, setSelectedDestinations] = useState<string[]>([])
+    const [selectedPrice, setSelectedPrice] = useState<string[]>([])
+
+    // console.log(selectedNights, selectedCategory, selectedDestinations, selectedPrice)
+
+    // console.log(selectedPrice)
+
+    // Filtered Data
+    const FilteredPlans = Plans.filter((plan) => {
+        const nights = plan.duration
+            .split(",")
+            .map(n => n.trim())
+
+        const destinations = plan.destinations
+            .split(",")
+            .map(d => d.trim())
+
+        const category = plan.category.map(c => c.trim())
+
+        const price = plan.price.split(",").map((p)=>p.trim())
+
+        const nightsMatch =
+            !selectedNights.length ||
+            selectedNights.some(n => nights.includes(n))
+
+        const destinationMatch =
+            !selectedDestinations.length ||
+            selectedDestinations.some(d => destinations.includes(d))
+
+        const categoryMatch =
+            !selectedCategory.length ||
+            selectedCategory.some(c => category.includes(c))
+
+        const priceMatch = !selectedPrice.length || selectedPrice.some((c)=> price.includes(c))
+
+        if(!nightsMatch && !destinationMatch && !categoryMatch){
+            return <h1>No Match Found</h1>
+        }
+
+        return nightsMatch && destinationMatch && categoryMatch 
+    })
+
+
 
     return (
         <div className="w-full overflow-hidden">
@@ -196,13 +234,13 @@ const Destination = ({ destinationName }: DestinationProps) => {
                     />
                 </div>
 
-                <h1 className=" text-2xl sm1:text-4xl font-semibold text-white">
-                    Manali Tour Packages!
+                <h1 className=" text-2xl sm1:text-4xl font-semibold text-white capitalize">
+                    {destinationName} Tour Packages!
                 </h1>
 
-                <hr className="h-0.5 w-24 bg-white mt-5" />
+                <hr className="h-px opacity-50 w-[50%] bg-white mt-5" />
 
-                <p onClick={() => setOpenDialog(true)} className="mt-10 text-white cursor-pointer">Request Callback</p>
+                <a onClick={() => setOpenDialog(true)} className="mt-10 px-5 py-2.5 btn-primary rounded-[5px] text-white cursor-pointer">Request Callback</a>
 
                 <div className="absolute inset-x-0 bottom-0 h-10 bg-black/70" />
 
@@ -232,18 +270,18 @@ const Destination = ({ destinationName }: DestinationProps) => {
 
                                     <hr className="my-3 h-0.5 bg-black" />
 
-                                    <FilterSection title="Number of Nights" data={Nights} />
-                                    <FilterSection title="Category" data={Category} />
+                                    <FilterSection title="Number of Nights" data={Nights} setState={setSelectedNights} />
+                                    <FilterSection title="Category" data={Category} setState={setSelectedCategory} />
                                     <FilterSection title="Departure From" data={Departure} />
-                                    <FilterSection title="Destination" data={DestinationList} />
-                                    <FilterSection title="Price" data={Price} />
+                                    <FilterSection title="Destination" data={DestinationList} setState={setSelectedDestinations} />
+                                    <FilterSection title="Price" data={Price} setState={setSelectedPrice} />
                                 </div>
                             </div>
                         </aside>
 
                         {/* CARDS – SCROLLABLE */}
                         <main className="w-full lg:w-[80%] h-full lg:overflow-y-auto pr-2 bg-gray-100 flex flex-col gap-7" style={{ scrollbarWidth: "none" }} >
-                            {Plans.map((plan, index) => (
+                            {FilteredPlans.map((plan, index) => (
                                 <HolidayPackageCard
                                     key={index}
                                     name={plan.name}
@@ -373,9 +411,10 @@ const Destination = ({ destinationName }: DestinationProps) => {
                                                 className=" rounded border px-3 py-2 text-sm bg-white"
                                             />
                                             <span className="font-semibold text-blue-600">epidemy</span>
-                                            <button type="button" className="text-green-600">
+                                            {/* <ReCAPTCHA sitekey={process.env.NEXT_PUBLIC_SITE_KEY} ref={recaptcha}/> */}
+                                            {/* <button type="button" className="text-green-600">
                                                 ⟳
-                                            </button>
+                                            </button> */}
                                         </div>
 
                                         <div className="flex justify-end pt-2">
@@ -396,81 +435,9 @@ const Destination = ({ destinationName }: DestinationProps) => {
             <Footer />
             <BottomFooter />
             <Modal isOpen={openDialog} setIsOpen={setOpenDialog} >
-                <EnquiryForm image="https://www.holidays2cherish.com/public/upload/holidays2cherish/images/enquiry_holidays2cherish.jpg" title="Haven't found an offer you like?" openSubModal={setOpenEnqDialog} />
+                <EnquiryForm image="https://www.holidays2cherish.com/public/upload/holidays2cherish/images/enquiry_holidays2cherish.jpg" title="Haven't found an offer you like?" />
             </Modal>
-            <Modal isOpen={openEnqDialog} setIsOpen={setOpenEnqDialog}>
 
-                <div
-                    className=" flex w-full space-x-4 rounded-lg bg-white"
-                >
-                    <div className='w-1/2 hidden md:flex' >
-                        <img className='h-full w-full' src="https://www.holidays2cherish.com/public/images/noimageother.jpg" alt='Modal contact' />
-                    </div>
-                    <div className=' w-full md:w-1/2 flex flex-col gap-y-4 p-6 mt-4'>
-                        <form
-                            onSubmit={handleSubmitPax(handlePax)}
-                            className="w-full max-w-xl rounded  bg-white"
-                        >
-                            <div className="border">
-
-
-                                <div className="grid grid-cols-2 bg-yellow-50 px-4 py-2 font-semibold">
-                                    <div>Details/Room type</div>
-                                    <div className="text-right">No. of Pax</div>
-                                </div>
-
-                                <Row
-                                    label="Adult (Twin Sharing)"
-                                    {...registerPax('adultTwin', { valueAsNumber: true, min: 0 })}
-                                />
-
-                                <Row
-                                    label="Adult (Triple Sharing)"
-                                    {...registerPax('adultTriple', { valueAsNumber: true, min: 0 })}
-                                />
-
-                                <Row
-                                    label="Adult (Single Room)"
-                                    {...registerPax('adultSingle', { valueAsNumber: true, min: 0 })}
-                                />
-
-                                <Row
-                                    label="Child Without Bed"
-                                    {...registerPax('childWithoutBed', { valueAsNumber: true, min: 0 })}
-                                />
-
-                                <Row
-                                    label="Child Extra / With Bed"
-                                    {...registerPax('childWithBed', { valueAsNumber: true, min: 0 })}
-                                />
-
-                                {/* Total */}
-                                <div className="grid grid-cols-2 border-t px-4 py-3 font-semibold">
-                                    <div>Total (No. of Pax)</div>
-                                    <div className="text-right">{totalPax}</div>
-                                </div>
-                            </div>
-                            {/* Actions */}
-                            <div className="flex justify-between gap-4 px-4 py-4">
-                                <button
-                                    type="button"
-                                    className="rounded bg-green-600 px-6 py-2 text-white hover:bg-green-700"
-                                >
-                                    Back
-                                </button>
-
-                                <button
-                                    type="submit"
-                                    className="rounded bg-green-600 px-6 py-2 text-white hover:bg-green-700"
-                                >
-                                    Check Rate &amp; Book
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-            </Modal>
         </div>
     );
 };

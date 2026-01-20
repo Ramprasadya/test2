@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Earth, HandCoins, SearchIcon, Users } from "lucide-react";
 import RatingMedia from "../assets/rating-media.png";
 const Card = dynamic(
@@ -24,10 +24,12 @@ import { useRouter } from "next/navigation";
 import Navbar from "../navbar/Navbar";
 import { WordRotate } from "../ui/word-rotate";
 import Title from "../UiComponents/Title";
-import Carousel from "../UiComponents/Carausel";
+import Carousel from "../UiComponents/Carousel/Carausel";
 import Footer from "../navbar/Footer";
 import BottomFooter from "../navbar/BottomFooter";
 import Link from "next/link";
+import Modal from "../UiComponents/Modal";
+import EnquiryForm from "../UiComponents/EnquiryForm";
 const PackageCard = dynamic(
   () => import("../UiComponents/CardComponent/PackageCard"),
   { ssr: false, loading: () => <div className="h-40 bg-gray-200 rounded-xl animate-pulse" /> }
@@ -45,6 +47,31 @@ const Testimonial = dynamic(
 
 
 const Homepage = () => {
+
+  const [openDialog, setOpenDialog] = useState<boolean>(false)
+
+  const [searchDestination, setSearchDestination] = useState<string>("")
+  const [matchDestination, setMatchDestination] = useState<string[]>([])
+  const router = useRouter()
+
+  const HandleSearchDestination = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearchDestination(value)
+    if (value.length > 0) {
+      const findDest = destinations.filter(
+        item => item.toLowerCase().includes(value.toLowerCase())
+      )
+      console.log(findDest)
+      setMatchDestination(findDest)
+    }
+  }
+
+  useEffect(()=>{
+      setTimeout(()=>{
+        setOpenDialog(true)
+      },2000)
+  },[])
+
   const Word = ["Thrills", "Experiences", "Adventures", "Escapes"];
   const Tiles = [
     {
@@ -458,21 +485,7 @@ const Homepage = () => {
     "Greece",
   ];
 
-  const [searchDestination, setSearchDestination] = useState<string>("")
-  const [matchDestination, setMatchDestination] = useState<string[]>([])
-  const router = useRouter()
-
-  const HandleSearchDestination = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setSearchDestination(value)
-    if (value.length > 2) {
-      const findDest = destinations.filter(
-        item => item.toLowerCase().includes(value.toLowerCase())
-      )
-      console.log(findDest)
-      setMatchDestination(findDest)
-    }
-  }
+  
 
   return (
     <div className="relative w-full md:w-236 mlg:w-full!">
@@ -513,10 +526,10 @@ const Homepage = () => {
               />
               <SearchIcon className="text-gray-600" />
             </div>
-            <div className="bg-gray-600 rounded-md">
+            <div className="bg-gray-600 rounded-md flex flex-col gap-y-2">
               {
                 matchDestination.map((d, i) =>
-                  <Link href={`/holidays/${d.toLowerCase()}`} key={i}>{d}</Link>
+                  <Link className="border-b" href={`/holidays/${d.toLowerCase()}`} key={i}>{d}</Link>
                 )
               }
             </div>
@@ -728,6 +741,9 @@ const Homepage = () => {
       </section>
       <Footer />
       <BottomFooter />
+       <Modal isOpen={openDialog} setIsOpen={setOpenDialog} >
+                <EnquiryForm image="https://www.holidays2cherish.com/public/upload/holidays2cherish/images/enquiry_holidays2cherish.jpg" title="Haven't found an offer you like?"  />
+            </Modal>
     </div>
   );
 };

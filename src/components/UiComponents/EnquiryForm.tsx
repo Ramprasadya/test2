@@ -1,3 +1,4 @@
+"use client"
 import { useForm, Controller } from 'react-hook-form'
 import PhoneInput from 'react-phone-input-2'
 import DatePicker from 'react-datepicker'
@@ -19,10 +20,10 @@ type Props = {
     image: string | { src: string;[key: string]: any }
     title: string
     customTitle?: boolean
-    openSubModal?:Dispatch<SetStateAction<boolean>>
+    setStep?:Dispatch<SetStateAction<"enquiry" | "pax" > >
 }
 
-const EnquiryForm = ({ image, title, customTitle = false, openSubModal }: Props) => {
+const EnquiryForm = ({ image, title, customTitle = false, setStep}: Props) => {
     const {
         register,
         control,
@@ -36,7 +37,7 @@ const EnquiryForm = ({ image, title, customTitle = false, openSubModal }: Props)
 
     const onSubmit = (data: FormValues) => {
         console.log(data)
-        openSubModal?.(true)
+        setStep?.("pax")
     }
     const imageSrc = typeof image === 'string' ? image : image.src;
 

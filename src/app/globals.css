@@ -32,6 +32,13 @@
 .ptextb{
   background-color: #3fa72a;
 }
+.btn-primary{
+  background-color: #3fa72a;
+  color: white;
+  padding: 10 20;
+  border-radius: 5px;
+  cursor: pointer;
+}
 .wrap{
   position: relative;
 }
