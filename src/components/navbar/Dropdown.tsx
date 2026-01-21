@@ -26,7 +26,7 @@ const Dropdown = ({data, style, setState}:Props) => {
     };
   }, [setState]);
   return (
-    <div className={`absolute bg-white top-10 z-50 p-10 rounded-xs ${style}`} ref={dropdownRef} >
+    <div className={`absolute bg-white text-black top-10 z-50 p-10 rounded-xs ${style}`} ref={dropdownRef} >
         <div className='grid grid-cols-2 gap-x-4 gap-y-2' >
             {
                 data.map((item,index)=>
