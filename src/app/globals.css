@@ -43,6 +43,11 @@
   position: relative;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+
 
 .wrap::before {
     content: '\25B6';
